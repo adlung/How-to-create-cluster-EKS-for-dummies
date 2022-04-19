@@ -1,0 +1,28 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eksworkshop-eksctl
+  region: ${AWS_REGION}
+  version: "1.19"
+
+#Identifica AZS baseada na region declarada(Cria automaticamente as subnets)
+availabilityZones: ["${AZS[0]}", "${AZS[1]}", "${AZS[2]}"]
+
+#Gerenciador de Instancias lancadas
+managedNodeGroups:
+- name: nodegroup
+  desiredCapacity: 3
+  instanceType: t3.small
+  ssh:
+    enableSsm: true
+
+# To enable all of the control plane logs, uncomment below:
+# cloudWatch:
+#  clusterLogging:
+#    enableTypes: ["*"]
+
+#Pega o KMS criado no Passo 2
+secretsEncryption:
+  keyARN: ${MASTER_ARN}
